@@ -33,8 +33,15 @@ public class MainApp extends Application {
         primaryStage.setResizable(true);
         loginStage.show();
 
-        loginStage.setOnCloseRequest(event -> Platform.exit());
-        primaryStage.setOnCloseRequest(event -> Platform.exit());
+        loginStage.setOnCloseRequest(event -> {
+            event.consume(); // 阻止默认的关闭操作
+            closeApplication();
+        });
+
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume(); // 阻止默认的关闭操作
+            closeApplication();
+        });
     }
 
     private void initializeServices() {
@@ -86,6 +93,34 @@ public class MainApp extends Application {
             primaryStage.hide();
             loginStage.show();
         });
+    }
+
+    private void closeApplication() {
+        // 关闭数据库连接
+        DatabaseConnection.closeConnection();
+
+        // 停止所有正在运行的服务
+        if (todoService != null) {
+            todoService.shutdown();
+        }
+        if (userService != null) {
+            userService.shutdown();
+        }
+        if (pomoService != null) {
+            pomoService.shutdown();
+        }
+
+        // 关闭所有窗口
+        if (loginStage != null) {
+            loginStage.close();
+        }
+        if (primaryStage != null) {
+            primaryStage.close();
+        }
+
+        // 退出应用程序
+        Platform.exit();
+        System.exit(0);
     }
 
     public static void main(String[] args) {

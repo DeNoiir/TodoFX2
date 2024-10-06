@@ -107,4 +107,13 @@ public class PomoService {
     public PomoTimer getTimer() {
         return timer;
     }
+
+    public void shutdown() {
+        try {
+            stopTimer();
+        } catch (IOException e) {
+            // 记录错误，但不中断关闭过程
+            e.printStackTrace();
+        }
+    }
 }

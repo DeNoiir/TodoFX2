@@ -18,12 +18,14 @@ public class DatabaseConnection {
         return connection;
     }
 
-    public static void closeConnection() {
+    public static synchronized void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                connection = null;
             }
         }
     }

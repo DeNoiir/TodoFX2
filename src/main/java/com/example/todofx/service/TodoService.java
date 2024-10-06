@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -20,10 +23,12 @@ public class TodoService {
     private final UserService userService;
     private final ObservableList<Todo> todos = FXCollections.observableArrayList();
     private boolean listenersEnabled = true;
+    private final ExecutorService executorService;
 
     public TodoService(TodoDao todoDao, UserService userService) {
         this.todoDao = todoDao;
         this.userService = userService;
+        this.executorService = Executors.newCachedThreadPool();
         setupListeners();
         setupUserListener();
     }
@@ -35,7 +40,13 @@ public class TodoService {
             return;
         }
 
-        todoDao.findAll().thenAccept(todoList -> {
+        CompletableFuture.supplyAsync(() -> {
+            try {
+                return todoDao.findAll().get();
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to load todos", e);
+            }
+        }, executorService).thenAccept(todoList -> {
             List<Todo> userTodos = todoList.stream()
                     .filter(todo -> todo.getUserId().equals(currentUser.getId()))
                     .collect(Collectors.toList());
@@ -46,7 +57,7 @@ public class TodoService {
             });
         }).exceptionally(ex -> {
             logger.severe("Failed to load todos: " + ex.getMessage());
-            throw new RuntimeException("Failed to load todos", ex);
+            return null;
         });
     }
 
@@ -96,9 +107,9 @@ public class TodoService {
     }
 
     private void saveTodoAsync(Todo todo) {
-        CompletableFuture.runAsync(() -> {
+        executorService.submit(() -> {
             try {
-                todoDao.save(todo).get(); // 等待操作完成
+                todoDao.save(todo).get();
             } catch (Exception e) {
                 logger.severe("Failed to save todo: " + e.getMessage());
                 throw new RuntimeException("Failed to save todo", e);
@@ -107,9 +118,9 @@ public class TodoService {
     }
 
     private void deleteTodoAsync(Todo todo) {
-        CompletableFuture.runAsync(() -> {
+        executorService.submit(() -> {
             try {
-                todoDao.delete(todo).get(); // 等待操作完成
+                todoDao.delete(todo).get();
             } catch (Exception e) {
                 logger.severe("Failed to delete todo: " + e.getMessage());
                 throw new RuntimeException("Failed to delete todo", e);
@@ -118,9 +129,9 @@ public class TodoService {
     }
 
     public void addTodo(Todo todo) {
-        CompletableFuture.runAsync(() -> {
+        executorService.submit(() -> {
             try {
-                todoDao.save(todo).get(); // 等待操作完成
+                todoDao.save(todo).get();
                 Platform.runLater(() -> todos.add(todo));
             } catch (Exception e) {
                 logger.severe("Failed to add todo: " + e.getMessage());
@@ -130,9 +141,9 @@ public class TodoService {
     }
 
     public void updateTodo(Todo todo) {
-        CompletableFuture.runAsync(() -> {
+        executorService.submit(() -> {
             try {
-                todoDao.save(todo).get(); // 等待操作完成
+                todoDao.save(todo).get();
                 Platform.runLater(() -> {
                     int index = todos.indexOf(todo);
                     if (index != -1) {
@@ -148,9 +159,9 @@ public class TodoService {
     }
 
     public void deleteTodo(Todo todo) {
-        CompletableFuture.runAsync(() -> {
+        executorService.submit(() -> {
             try {
-                todoDao.delete(todo).get(); // 等待操作完成
+                todoDao.delete(todo).get();
                 Platform.runLater(() -> todos.remove(todo));
             } catch (Exception e) {
                 logger.severe("Failed to delete todo: " + e.getMessage());
@@ -200,13 +211,24 @@ public class TodoService {
     }
 
     public void logout() {
-        disableListeners();  // 禁用监听器
-        todos.clear();       // 清空当前的 todos 列表
-        enableListeners();   // 重新启用监听器
+        disableListeners();
+        todos.clear();
+        enableListeners();
         userService.logout();
     }
 
     public ObservableList<Todo> getTodosObservableList() {
         return todos;
+    }
+
+    public void shutdown() {
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        }
     }
 }
