@@ -5,7 +5,7 @@ import com.example.todofx.dao.UserDao;
 import com.example.todofx.service.PomoService;
 import com.example.todofx.service.TodoService;
 import com.example.todofx.service.UserService;
-import com.example.todofx.ui.ExceptionDialog;
+import com.example.todofx.ui.CustomDialog;
 import com.example.todofx.ui.LoginScene;
 import com.example.todofx.ui.MainScene;
 import com.example.todofx.util.DatabaseConnection;
@@ -34,12 +34,12 @@ public class MainApp extends Application {
         loginStage.show();
 
         loginStage.setOnCloseRequest(event -> {
-            event.consume(); // 阻止默认的关闭操作
+            event.consume();
             closeApplication();
         });
 
         primaryStage.setOnCloseRequest(event -> {
-            event.consume(); // 阻止默认的关闭操作
+            event.consume();
             closeApplication();
         });
     }
@@ -51,10 +51,10 @@ public class MainApp extends Application {
             TodoDao todoDao = new TodoDao(connection);
             userService = new UserService(userDao);
             todoService = new TodoService(todoDao, userService);
-            pomoService = new PomoService(); // 初始化 PomoService
+            pomoService = new PomoService();
         } catch (Exception e) {
             Platform.runLater(() -> {
-                new ExceptionDialog(e).showAndWait();
+                CustomDialog.showException(e);
                 System.exit(1);
             });
         }
@@ -96,31 +96,32 @@ public class MainApp extends Application {
     }
 
     private void closeApplication() {
-        // 关闭数据库连接
-        DatabaseConnection.closeConnection();
+        try {
+            DatabaseConnection.closeConnection();
 
-        // 停止所有正在运行的服务
-        if (todoService != null) {
-            todoService.shutdown();
-        }
-        if (userService != null) {
-            userService.shutdown();
-        }
-        if (pomoService != null) {
-            pomoService.shutdown();
-        }
+            if (todoService != null) {
+                todoService.shutdown();
+            }
+            if (userService != null) {
+                userService.shutdown();
+            }
+            if (pomoService != null) {
+                pomoService.shutdown();
+            }
 
-        // 关闭所有窗口
-        if (loginStage != null) {
-            loginStage.close();
-        }
-        if (primaryStage != null) {
-            primaryStage.close();
-        }
+            if (loginStage != null) {
+                loginStage.close();
+            }
+            if (primaryStage != null) {
+                primaryStage.close();
+            }
 
-        // 退出应用程序
-        Platform.exit();
-        System.exit(0);
+            Platform.exit();
+            System.exit(0);
+        } catch (Exception e) {
+            CustomDialog.showException(e);
+            System.exit(1);
+        }
     }
 
     public static void main(String[] args) {
@@ -129,7 +130,7 @@ public class MainApp extends Application {
 
     @Override
     public void stop() throws Exception {
-        DatabaseConnection.closeConnection();
+        closeApplication();
         super.stop();
     }
 }

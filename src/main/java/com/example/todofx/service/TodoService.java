@@ -3,6 +3,7 @@ package com.example.todofx.service;
 import com.example.todofx.dao.TodoDao;
 import com.example.todofx.entity.Todo;
 import com.example.todofx.entity.User;
+import com.example.todofx.ui.CustomDialog;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,6 +58,7 @@ public class TodoService {
             });
         }).exceptionally(ex -> {
             logger.severe("Failed to load todos: " + ex.getMessage());
+            CustomDialog.showException(ex);
             return null;
         });
     }
@@ -112,7 +114,7 @@ public class TodoService {
                 todoDao.save(todo).get();
             } catch (Exception e) {
                 logger.severe("Failed to save todo: " + e.getMessage());
-                throw new RuntimeException("Failed to save todo", e);
+                CustomDialog.showException(e);
             }
         });
     }
@@ -123,7 +125,7 @@ public class TodoService {
                 todoDao.delete(todo).get();
             } catch (Exception e) {
                 logger.severe("Failed to delete todo: " + e.getMessage());
-                throw new RuntimeException("Failed to delete todo", e);
+                CustomDialog.showException(e);
             }
         });
     }
@@ -135,7 +137,7 @@ public class TodoService {
                 Platform.runLater(() -> todos.add(todo));
             } catch (Exception e) {
                 logger.severe("Failed to add todo: " + e.getMessage());
-                throw new RuntimeException("Failed to add todo", e);
+                CustomDialog.showException(e);
             }
         });
     }
@@ -153,7 +155,7 @@ public class TodoService {
                 });
             } catch (Exception e) {
                 logger.severe("Failed to update todo: " + e.getMessage());
-                throw new RuntimeException("Failed to update todo", e);
+                CustomDialog.showException(e);
             }
         });
     }
@@ -165,7 +167,7 @@ public class TodoService {
                 Platform.runLater(() -> todos.remove(todo));
             } catch (Exception e) {
                 logger.severe("Failed to delete todo: " + e.getMessage());
-                throw new RuntimeException("Failed to delete todo", e);
+                CustomDialog.showException(e);
             }
         });
     }

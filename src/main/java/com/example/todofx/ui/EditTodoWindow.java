@@ -2,17 +2,17 @@ package com.example.todofx.ui;
 
 import com.example.todofx.entity.Todo;
 import com.example.todofx.service.TodoService;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditTodoWindow extends Stage {
     private final TodoService todoService;
@@ -43,42 +43,53 @@ public class EditTodoWindow extends Stage {
 
         DatePicker dueDatePicker = new DatePicker(todo.dueDateProperty().get());
 
+        ComboBox<Todo.Status> statusComboBox = new ComboBox<>();
+        statusComboBox.getItems().addAll(Todo.Status.values());
+        statusComboBox.setValue(todo.statusProperty().get());
+
         grid.add(new Label("标题:"), 0, 0);
         grid.add(titleField, 1, 0);
         grid.add(new Label("分类:"), 0, 1);
         grid.add(categoryComboBox, 1, 1);
         grid.add(new Label("截止日期:"), 0, 2);
         grid.add(dueDatePicker, 1, 2);
-        grid.add(new Label("描述:"), 0, 3);
-        grid.add(descriptionArea, 1, 3);
+        grid.add(new Label("状态:"), 0, 3);
+        grid.add(statusComboBox, 1, 3);
+        grid.add(new Label("描述:"), 0, 4);
+        grid.add(descriptionArea, 1, 4);
 
         Button saveButton = new Button("保存");
         Button deleteButton = new Button("删除");
         Button cancelButton = new Button("取消");
 
         saveButton.setOnAction(e -> {
-            try {
+            if (validateInput(titleField, categoryComboBox, dueDatePicker, statusComboBox)) {
                 todo.titleProperty().set(titleField.getText());
                 todo.descriptionProperty().set(descriptionArea.getText());
                 todo.categoryProperty().set(categoryComboBox.getValue());
                 todo.dueDateProperty().set(dueDatePicker.getValue());
+                todo.statusProperty().set(statusComboBox.getValue());
                 todo.updatedAtProperty().set(LocalDateTime.now());
 
                 todoService.updateTodo(todo);
                 close();
-            } catch (Exception ex) {
-                Platform.runLater(() -> new ExceptionDialog(ex).showAndWait());
             }
         });
 
         deleteButton.setOnAction(e -> {
-            try {
-                todoService.deleteTodo(todo);
-                close();
-            } catch (Exception ex) {
-                Platform.runLater(() -> new ExceptionDialog(ex).showAndWait());
-            }
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("确认删除");
+            alert.setHeaderText("您确定要删除这个待办事项吗？");
+            alert.setContentText("此操作不可撤销。");
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    todoService.deleteTodo(todo);
+                    close();
+                }
+            });
         });
+
         cancelButton.setOnAction(e -> close());
 
         HBox buttonBox = new HBox(10);
@@ -90,9 +101,31 @@ public class EditTodoWindow extends Stage {
         Scene scene = new Scene(mainLayout);
         scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
 
-        // 加载字体
-        Font.loadFont(getClass().getResourceAsStream("/com/example/todofx/FZfont140.TTF"), 14);
-
         setScene(scene);
+    }
+
+    private boolean validateInput(TextField titleField, ComboBox<Todo.Category> categoryComboBox,
+                                  DatePicker dueDatePicker, ComboBox<Todo.Status> statusComboBox) {
+        List<String> errors = new ArrayList<>();
+
+        if (titleField.getText().trim().isEmpty()) {
+            errors.add("标题不能为空");
+        }
+        if (categoryComboBox.getValue() == null) {
+            errors.add("请选择一个分类");
+        }
+        if (dueDatePicker.getValue() == null) {
+            errors.add("请选择截止日期");
+        }
+        if (statusComboBox.getValue() == null) {
+            errors.add("请选择一个状态");
+        }
+
+        if (!errors.isEmpty()) {
+            CustomDialog.showValidationErrors(errors);
+            return false;
+        }
+
+        return true;
     }
 }

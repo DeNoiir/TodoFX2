@@ -3,17 +3,17 @@ package com.example.todofx.ui;
 import com.example.todofx.entity.Todo;
 import com.example.todofx.service.TodoService;
 import com.example.todofx.service.UserService;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddTodoWindow extends Stage {
     private final TodoService todoService;
@@ -61,7 +61,7 @@ public class AddTodoWindow extends Stage {
         Button cancelButton = new Button("取消");
 
         saveButton.setOnAction(e -> {
-            try {
+            if (validateInput(titleField, categoryComboBox, dueDatePicker)) {
                 Todo newTodo = new Todo();
                 newTodo.titleProperty().set(titleField.getText());
                 newTodo.descriptionProperty().set(descriptionArea.getText());
@@ -74,8 +74,6 @@ public class AddTodoWindow extends Stage {
 
                 todoService.addTodo(newTodo);
                 close();
-            } catch (Exception ex) {
-                Platform.runLater(() -> new ExceptionDialog(ex).showAndWait());
             }
         });
 
@@ -91,9 +89,27 @@ public class AddTodoWindow extends Stage {
         Scene scene = new Scene(mainLayout);
         scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
 
-        // 加载字体
-        Font.loadFont(getClass().getResourceAsStream("/com/example/todofx/FZfont140.TTF"), 14);
-
         setScene(scene);
+    }
+
+    private boolean validateInput(TextField titleField, ComboBox<Todo.Category> categoryComboBox, DatePicker dueDatePicker) {
+        List<String> errors = new ArrayList<>();
+
+        if (titleField.getText().trim().isEmpty()) {
+            errors.add("标题不能为空");
+        }
+        if (categoryComboBox.getValue() == null) {
+            errors.add("请选择一个分类");
+        }
+        if (dueDatePicker.getValue() == null) {
+            errors.add("请选择截止日期");
+        }
+
+        if (!errors.isEmpty()) {
+            CustomDialog.showValidationErrors(errors);
+            return false;
+        }
+
+        return true;
     }
 }

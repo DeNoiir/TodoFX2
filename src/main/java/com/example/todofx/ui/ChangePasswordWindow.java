@@ -1,16 +1,16 @@
 package com.example.todofx.ui;
 
 import com.example.todofx.service.UserService;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangePasswordWindow extends Stage {
     private final UserService userService;
@@ -43,25 +43,16 @@ public class ChangePasswordWindow extends Stage {
         Button cancelButton = new Button("取消");
 
         changeButton.setOnAction(e -> {
-            String newPassword = newPasswordField.getText();
-            if (newPassword.equals(confirmPasswordField.getText())) {
-                try {
-                    userService.changePassword(currentPasswordField.getText(), newPassword)
-                            .thenAccept(success -> {
-                                if (success) {
-                                    Platform.runLater(() -> {
-                                        showAlert("成功", "密码修改成功");
-                                        close();
-                                    });
-                                } else {
-                                    Platform.runLater(() -> showAlert("错误", "密码修改失败。请检查您的当前密码。"));
-                                }
-                            });
-                } catch (Exception ex) {
-                    Platform.runLater(() -> new ExceptionDialog(ex).showAndWait());
-                }
-            } else {
-                showAlert("错误", "新密码不匹配");
+            if (validateInput(currentPasswordField, newPasswordField, confirmPasswordField)) {
+                userService.changePassword(currentPasswordField.getText(), newPasswordField.getText())
+                        .thenAccept(success -> {
+                            if (success) {
+                                CustomDialog.showAndWait(CustomDialog.DialogType.INFO, "成功", "密码修改成功", "您的密码已成功更新。");
+                                close();
+                            } else {
+                                CustomDialog.showAndWait(CustomDialog.DialogType.ERROR, "错误", "密码修改失败", "请检查您的当前密码是否正确。");
+                            }
+                        });
             }
         });
 
@@ -73,18 +64,33 @@ public class ChangePasswordWindow extends Stage {
         Scene scene = new Scene(grid);
         scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
 
-        // 加载字体
-        Font.loadFont(getClass().getResourceAsStream("/com/example/todofx/FZfont140.TTF"), 14);
-
         setScene(scene);
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.getDialogPane().getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
-        alert.showAndWait();
+    private boolean validateInput(PasswordField currentPasswordField, PasswordField newPasswordField, PasswordField confirmPasswordField) {
+        List<String> errors = new ArrayList<>();
+
+        if (currentPasswordField.getText().trim().isEmpty()) {
+            errors.add("请输入当前密码");
+        }
+        if (newPasswordField.getText().trim().isEmpty()) {
+            errors.add("请输入新密码");
+        }
+        if (confirmPasswordField.getText().trim().isEmpty()) {
+            errors.add("请确认新密码");
+        }
+        if (!newPasswordField.getText().equals(confirmPasswordField.getText())) {
+            errors.add("新密码和确认密码不匹配");
+        }
+        if (newPasswordField.getText().length() < 6) {
+            errors.add("新密码长度必须至少为6个字符");
+        }
+
+        if (!errors.isEmpty()) {
+            CustomDialog.showValidationErrors(errors);
+            return false;
+        }
+
+        return true;
     }
 }

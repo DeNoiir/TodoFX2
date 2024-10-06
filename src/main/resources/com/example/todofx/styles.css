@@ -1,7 +1,6 @@
 /* 全局样式 */
 .root {
     -fx-background-color: #C7D1EA;
-    -fx-font-family: "FZFontNormal";
 }
 
 /* 按钮样式 */
@@ -54,7 +53,6 @@
 }
 
 /* 下拉框样式 */
-/* ComboBox 样式 */
 .combo-box {
     -fx-background-color: white;
     -fx-border-color: #8187C5;
@@ -351,4 +349,74 @@
     -fx-spacing: 10;
     -fx-alignment: CENTER-RIGHT;
     -fx-padding: 10 0 0 0;
+}
+
+/* CustomDialog 样式 */
+.custom-dialog {
+    -fx-background-color: #C7D1EA;
+}
+
+.custom-dialog .dialog-pane {
+    -fx-background-color: #C7D1EA;
+}
+
+.custom-dialog .dialog-pane .header-panel {
+    -fx-background-color: #815DAB;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.custom-dialog .dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+}
+
+.custom-dialog .dialog-pane .content.label {
+    -fx-text-fill: #6C60AB;
+    -fx-font-size: 14px;
+}
+
+.custom-dialog .dialog-pane .button-bar .button {
+    -fx-background-color: #6C60AB;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+.custom-dialog .dialog-pane .button-bar .button:hover {
+    -fx-background-color: #815DAB;
+}
+
+.custom-dialog .dialog-pane .expandable-content {
+    -fx-padding: 10;
+}
+
+.custom-dialog .dialog-pane .expandable-content .label {
+    -fx-font-weight: bold;
+}
+
+.custom-dialog .dialog-pane .expandable-content .text-area {
+    -fx-font-family: monospace;
+}
+
+/* 特定类型对话框样式 */
+.info-dialog .dialog-pane .header-panel {
+    -fx-background-color: #4CAF50;
+}
+
+.warning-dialog .dialog-pane .header-panel {
+    -fx-background-color: #FFC107;
+}
+
+.error-dialog .dialog-pane .header-panel {
+    -fx-background-color: #F44336;
+}
+
+/* 验证错误样式 */
+.custom-dialog .validation-error-list {
+    -fx-background-color: #FFEBEE;
+    -fx-background-radius: 5px;
+    -fx-padding: 10;
+}
+
+.custom-dialog .validation-error-list .label {
+    -fx-text-fill: #D32F2F;
 }

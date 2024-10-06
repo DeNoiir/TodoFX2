@@ -13,11 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoginScene {
     private MainApp mainApp;
     private UserService userService;
     private Scene scene;
-    private Label messageLabel;
 
     public LoginScene(MainApp mainApp, UserService userService) {
         this.mainApp = mainApp;
@@ -52,18 +54,11 @@ public class LoginScene {
         Label titleLabel = new Label("待办事项应用登录");
         titleLabel.getStyleClass().add("login-title");
 
-        messageLabel = new Label();
-        messageLabel.getStyleClass().add("message-label");
-        messageLabel.setWrapText(true);
-        messageLabel.setMaxWidth(300);
-        messageLabel.setAlignment(Pos.CENTER);
-
         loginBox.getChildren().addAll(
                 titleLabel,
                 usernameField,
                 passwordField,
-                buttonBox,
-                messageLabel
+                buttonBox
         );
 
         scene = new Scene(loginBox, 400, 300);
@@ -71,7 +66,7 @@ public class LoginScene {
     }
 
     private void login(String username, String password) {
-        try {
+        if (validateLoginInput(username, password)) {
             userService.login(username, password)
                     .thenAcceptAsync(success -> {
                         if (success) {
@@ -79,44 +74,70 @@ public class LoginScene {
                                 mainApp.showMainScene();
                             });
                         } else {
-                            Platform.runLater(() -> showMessage("登录失败：用户名或密码无效", true));
+                            Platform.runLater(() -> CustomDialog.showAndWait(CustomDialog.DialogType.ERROR, "登录失败", "用户名或密码无效", "请检查您的用户名和密码，然后重试。"));
                         }
                     }, Platform::runLater)
                     .exceptionally(ex -> {
-                        Platform.runLater(() -> showMessage("发生错误：" + ex.getMessage(), true));
+                        Platform.runLater(() -> CustomDialog.showException(ex));
                         return null;
                     });
-        } catch (Exception e) {
-            Platform.runLater(() -> showMessage("发生错误：" + e.getMessage(), true));
         }
     }
 
     private void register(String username, String password) {
-        try {
+        if (validateRegisterInput(username, password)) {
             userService.register(username, password)
                     .thenAcceptAsync(success -> {
                         if (success) {
-                            Platform.runLater(() -> showMessage("注册成功：您现在可以使用新的凭据登录", false));
+                            Platform.runLater(() -> CustomDialog.showAndWait(CustomDialog.DialogType.INFO, "注册成功", "账户已创建", "您现在可以使用新的凭据登录。"));
                         } else {
-                            Platform.runLater(() -> showMessage("注册失败：用户名已存在", true));
+                            Platform.runLater(() -> CustomDialog.showAndWait(CustomDialog.DialogType.ERROR, "注册失败", "用户名已存在", "请选择一个不同的用户名。"));
                         }
                     }, Platform::runLater)
                     .exceptionally(ex -> {
-                        Platform.runLater(() -> showMessage("发生错误：" + ex.getMessage(), true));
+                        Platform.runLater(() -> CustomDialog.showException(ex));
                         return null;
                     });
-        } catch (Exception e) {
-            Platform.runLater(() -> showMessage("发生错误：" + e.getMessage(), true));
         }
     }
 
-    private void showMessage(String message, boolean isError) {
-        messageLabel.setText(message);
-        if (isError) {
-            messageLabel.getStyleClass().add("error-message");
-        } else {
-            messageLabel.getStyleClass().remove("error-message");
+    private boolean validateLoginInput(String username, String password) {
+        List<String> errors = new ArrayList<>();
+
+        if (username.trim().isEmpty()) {
+            errors.add("用户名不能为空");
         }
+        if (password.trim().isEmpty()) {
+            errors.add("密码不能为空");
+        }
+
+        if (!errors.isEmpty()) {
+            CustomDialog.showValidationErrors(errors);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateRegisterInput(String username, String password) {
+        List<String> errors = new ArrayList<>();
+
+        if (username.trim().isEmpty()) {
+            errors.add("用户名不能为空");
+        }
+        if (password.trim().isEmpty()) {
+            errors.add("密码不能为空");
+        }
+        if (password.length() < 6) {
+            errors.add("密码长度必须至少为6个字符");
+        }
+
+        if (!errors.isEmpty()) {
+            CustomDialog.showValidationErrors(errors);
+            return false;
+        }
+
+        return true;
     }
 
     public Scene getScene() {

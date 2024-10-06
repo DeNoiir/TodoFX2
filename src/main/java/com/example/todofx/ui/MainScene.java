@@ -11,10 +11,7 @@ import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -155,26 +152,21 @@ public class MainScene {
         todoList.setItems(FXCollections.observableArrayList(todoService.getByStatus(status)));
         todoList.setCellFactory(param -> new TodoListCell());
 
-        // 设置 ListView 的宽度和高度属性
-        todoList.setPrefWidth(0); // 允许 ListView 收缩到其内容的大小
+        todoList.setPrefWidth(0);
         todoList.setMaxWidth(Double.MAX_VALUE);
-        todoList.setMinHeight(100); // 设置一个最小高度，以确保列表始终可见
+        todoList.setMinHeight(100);
         todoList.setMaxHeight(Double.MAX_VALUE);
 
-        // 允许 ListView 在 VBox 中垂直增长
         VBox.setVgrow(todoList, Priority.ALWAYS);
 
-        // 设置列表视图的固定单元格大小
-        todoList.setFixedCellSize(70); // 根据您的 todo 卡片设计调整这个值
+        todoList.setFixedCellSize(70);
 
-        // 绑定列表视图的预设高度到其内容
         todoList.prefHeightProperty().bind(Bindings.size(todoList.getItems()).multiply(todoList.getFixedCellSize()).add(2));
 
         setupDragAndDrop(todoList, status);
 
         column.getChildren().addAll(titleLabel, todoList);
 
-        // 确保 VBox 也可以在水平方向上增长
         HBox.setHgrow(column, Priority.ALWAYS);
 
         return column;

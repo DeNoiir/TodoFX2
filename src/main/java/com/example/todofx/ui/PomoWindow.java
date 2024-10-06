@@ -17,8 +17,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
-
 public class PomoWindow extends Stage {
     private final PomoService pomoService;
     private Label timerLabel;
@@ -85,12 +83,8 @@ public class PomoWindow extends Stage {
 
     private void initTimer() {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            try {
-                pomoService.decrementTimer();
-                updateTimerDisplay();
-            } catch (IOException ex) {
-                Platform.runLater(() -> new ExceptionDialog(ex).showAndWait());
-            }
+            pomoService.decrementTimer();
+            updateTimerDisplay();
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
@@ -131,8 +125,8 @@ public class PomoWindow extends Stage {
             timeline.play();
             startButton.setDisable(true);
             pauseButton.setDisable(false);
-        } catch (IOException e) {
-            Platform.runLater(() -> new ExceptionDialog(e).showAndWait());
+        } catch (Exception e) {
+            Platform.runLater(() -> CustomDialog.showException(e));
         }
     }
 
@@ -142,8 +136,8 @@ public class PomoWindow extends Stage {
             timeline.stop();
             startButton.setDisable(false);
             pauseButton.setDisable(true);
-        } catch (IOException e) {
-            Platform.runLater(() -> new ExceptionDialog(e).showAndWait());
+        } catch (Exception e) {
+            Platform.runLater(() -> CustomDialog.showException(e));
         }
     }
 
@@ -153,8 +147,8 @@ public class PomoWindow extends Stage {
             pomoService.stopTimer();
             timeline.stop();
             super.close();
-        } catch (IOException e) {
-            Platform.runLater(() -> new ExceptionDialog(e).showAndWait());
+        } catch (Exception e) {
+            Platform.runLater(() -> CustomDialog.showException(e));
         }
     }
 }

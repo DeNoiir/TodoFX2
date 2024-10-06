@@ -1,6 +1,7 @@
 package com.example.todofx.service;
 
 import com.example.todofx.entity.PomoTimer;
+import com.example.todofx.ui.CustomDialog;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -13,53 +14,66 @@ public class PomoService {
     private final ObjectMapper objectMapper;
     private PomoTimer timer;
 
-    public PomoService() throws IOException {
+    public PomoService() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
         File file = new File(TIMER_FILE);
         if (!file.exists()) {
-            file.createNewFile();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                CustomDialog.showException(e);
+            }
         }
 
         loadTimer();
     }
 
-    public void loadTimer() throws IOException {
+    public void loadTimer() {
         File file = new File(TIMER_FILE);
         if (file.exists() && file.length() > 0) {
-            timer = objectMapper.readValue(file, PomoTimer.class);
+            try {
+                timer = objectMapper.readValue(file, PomoTimer.class);
+            } catch (IOException e) {
+                CustomDialog.showException(e);
+                timer = new PomoTimer();
+            }
         } else {
             timer = new PomoTimer();
-            timer.setCurrentCycle(getInitialTime(timer.getState()));
+        }
+        timer.setCurrentCycle(getInitialTime(timer.getState()));
+    }
+
+    public void saveTimer() {
+        try {
+            objectMapper.writeValue(new File(TIMER_FILE), timer);
+        } catch (IOException e) {
+            CustomDialog.showException(e);
         }
     }
 
-    public void saveTimer() throws IOException {
-        objectMapper.writeValue(new File(TIMER_FILE), timer);
-    }
-
-    public void startTimer() throws IOException {
+    public void startTimer() {
         timer.setRunning(true);
         timer.setLastStartTime(LocalDateTime.now());
         saveTimer();
     }
 
-    public void stopTimer() throws IOException {
+    public void stopTimer() {
         if (timer.isRunning()) {
             timer.setRunning(false);
             saveTimer();
         }
     }
 
-    public void pauseTimer() throws IOException {
+    public void pauseTimer() {
         if (timer.isRunning()) {
             timer.setRunning(false);
             saveTimer();
         }
     }
 
-    public void decrementTimer() throws IOException {
+    public void decrementTimer() {
         if (timer.isRunning() && timer.getCurrentCycle() > 0) {
             timer.setCurrentCycle(timer.getCurrentCycle() - 1);
             if (timer.getCurrentCycle() == 0) {
@@ -109,11 +123,6 @@ public class PomoService {
     }
 
     public void shutdown() {
-        try {
-            stopTimer();
-        } catch (IOException e) {
-            // 记录错误，但不中断关闭过程
-            e.printStackTrace();
-        }
+        stopTimer();
     }
 }

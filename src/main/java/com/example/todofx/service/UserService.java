@@ -2,6 +2,7 @@ package com.example.todofx.service;
 
 import com.example.todofx.dao.UserDao;
 import com.example.todofx.entity.User;
+import com.example.todofx.ui.CustomDialog;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -40,11 +41,15 @@ public class UserService {
             try {
                 newUser.passwordHashProperty().set(hashPassword(password));
             } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
+                CustomDialog.showException(e);
+                return CompletableFuture.completedFuture(false);
             }
             newUser.createdAtProperty().set(LocalDateTime.now());
             newUser.updatedAtProperty().set(LocalDateTime.now());
             return userDao.save(newUser).thenApply(u -> true);
+        }).exceptionally(ex -> {
+            CustomDialog.showException(ex);
+            return false;
         });
     }
 
@@ -75,6 +80,9 @@ public class UserService {
                 });
             }
             return CompletableFuture.completedFuture(false);
+        }).exceptionally(ex -> {
+            CustomDialog.showException(ex);
+            return false;
         });
     }
 
@@ -97,7 +105,10 @@ public class UserService {
                 }
             }
             return false;
-        }, executorService);
+        }, executorService).exceptionally(ex -> {
+            CustomDialog.showException(ex);
+            return false;
+        });
     }
 
     public CompletableFuture<Void> deleteAccount() {
@@ -111,7 +122,10 @@ public class UserService {
                     throw new RuntimeException("Failed to delete account", e);
                 }
             }
-        }, executorService);
+        }, executorService).exceptionally(ex -> {
+            CustomDialog.showException(ex);
+            return null;
+        });
     }
 
     public User getCurrentUser() {
