@@ -1,0 +1,354 @@
+/* 全局样式 */
+.root {
+    -fx-background-color: #C7D1EA;
+    -fx-font-family: "FZFontNormal";
+}
+
+/* 按钮样式 */
+.button {
+    -fx-background-color: #6C60AB;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5 10 5 10;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #815DAB;
+}
+
+/* 标签样式 */
+.label {
+    -fx-text-fill: #6C60AB;
+    -fx-font-size: 14px;
+}
+
+/* 文本框样式 */
+.text-field, .text-area, .password-field {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+/* 列表视图样式 */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10 5 10;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #815DAB;
+    -fx-text-fill: white;
+}
+
+/* 下拉框样式 */
+/* ComboBox 样式 */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #6C60AB;
+    -fx-background-color: white;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #6C60AB;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #C7D1EA;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #C7D1EA;
+    -fx-text-fill: #6C60AB;
+}
+
+/* 选中后的显示样式 */
+.combo-box > .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #6C60AB;
+}
+
+.combo-box:showing > .list-cell,
+.combo-box > .list-cell:selected {
+    -fx-background-color: #C7D1EA;
+    -fx-text-fill: #6C60AB;
+}
+
+/* 箭头样式 */
+.combo-box .arrow-button {
+    -fx-background-color: #6C60AB;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.combo-box .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+/* 分类选择器特定样式 */
+.category-combo-box {
+    -fx-pref-width: 200px;
+}
+
+.category-combo-box .list-cell {
+    -fx-padding: 5 10 5 10;
+}
+
+/* 日期选择器样式 */
+.date-picker {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #6C60AB;
+    -fx-background-radius: 0 5 5 0;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    -fx-background-color: #815DAB;
+    -fx-padding: 10;
+    -fx-background-radius: 0 10 10 0;
+}
+
+.sidebar-username {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 20 0;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10 20 10 20;
+    -fx-alignment: CENTER-LEFT;
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #6C60AB;
+}
+
+/* 看板列样式 */
+.kanban-column {
+    -fx-background-color: #C7D1EA;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-background-radius: 10px;
+}
+
+.column-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6C60AB;
+}
+
+/* 待办事项卡片样式 */
+.todo-cell {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.todo-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-overflow: ellipsis;
+    -fx-white-space: nowrap;
+    -fx-overflow: hidden;
+}
+
+/* 番茄钟计时器窗口样式 */
+.pomo-window {
+    -fx-background-color: #C7D1EA;
+    -fx-padding: 20;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #6C60AB;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.pomo-timer-label {
+    -fx-font-size: 36px;
+    -fx-text-fill: #6C60AB;
+}
+
+.pomo-button {
+    -fx-font-size: 18px;
+}
+
+/* 登录窗口样式 */
+.login-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6C60AB;
+}
+
+/* 添加/编辑待办事项窗口样式 */
+.todo-window {
+    -fx-background-color: #C7D1EA;
+    -fx-padding: 20;
+    -fx-background-radius: 10px;
+}
+
+.todo-window .label {
+    -fx-font-size: 16px;
+}
+
+.todo-window .text-field, .todo-window .text-area, .todo-window .combo-box, .todo-window .date-picker {
+    -fx-pref-width: 300px;
+}
+
+/* 修改密码窗口样式 */
+.change-password-window {
+    -fx-background-color: #C7D1EA;
+    -fx-padding: 20;
+    -fx-background-radius: 10px;
+}
+
+/* 通用对话框样式 */
+.dialog-pane {
+    -fx-background-color: #C7D1EA;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #815DAB;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+}
+
+.dialog-pane .content.label {
+    -fx-text-fill: #6C60AB;
+}
+
+/* 滚动条样式 */
+.scroll-bar {
+    -fx-background-color: #C7D1EA;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #6C60AB;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: #815DAB;
+}
+
+/* 主窗口样式 */
+.main-window {
+    -fx-background-color: #C7D1EA;
+}
+
+/* 浮动按钮样式 */
+.emoji-button {
+    -fx-background-color: #6C60AB;
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-background-radius: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);
+}
+
+.emoji-button:hover {
+    -fx-background-color: #815DAB;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0);
+}
+
+.add-button {
+    -fx-translate-x: 0px;
+}
+
+.pomo-button {
+    -fx-translate-x: 0px;
+}
+
+/* 按钮容器样式 */
+.button-container {
+    -fx-spacing: 10;
+    -fx-padding: 0 20 20 0;
+}
+
+/* 看板列表视图样式 */
+.kanban-list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.kanban-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10 5 10;
+}
+
+/* 隐藏滚动条 */
+.kanban-list-view .scroll-bar:vertical,
+.kanban-list-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+/* 网格样式 */
+.grid {
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-padding: 20;
+}
+
+/* 按钮盒子样式 */
+.button-box {
+    -fx-spacing: 10;
+    -fx-alignment: CENTER-RIGHT;
+    -fx-padding: 10 0 0 0;
+}
