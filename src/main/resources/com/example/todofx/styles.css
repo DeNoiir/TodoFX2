@@ -110,15 +110,6 @@
     -fx-background-color: white;
 }
 
-/* 分类选择器特定样式 */
-.category-combo-box {
-    -fx-pref-width: 200px;
-}
-
-.category-combo-box .list-cell {
-    -fx-padding: 5 10 5 10;
-}
-
 /* 日期选择器样式 */
 .date-picker {
     -fx-background-color: white;
@@ -131,6 +122,49 @@
 .date-picker .arrow-button {
     -fx-background-color: #6C60AB;
     -fx-background-radius: 0 5 5 0;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+.date-picker .cell {
+    -fx-background-color: white;
+}
+
+.date-picker .cell:hover {
+    -fx-background-color: #C7D1EA;
+}
+
+.date-picker .cell:focused {
+    -fx-background-color: #815DAB;
+    -fx-text-fill: white;
+}
+
+.date-picker .selected {
+    -fx-background-color: #6C60AB;
+    -fx-text-fill: white;
+}
+
+.date-picker .selected:focused {
+    -fx-background-color: #815DAB;
+    -fx-text-fill: white;
+}
+
+.date-picker-popup {
+    -fx-border-color: #8187C5;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #C7D1EA;
+}
+
+.date-picker-popup .month-year-pane .label {
+    -fx-text-fill: #6C60AB;
+}
+
+.date-picker-popup .week-number-cell {
+    -fx-text-fill: #8187C5;
 }
 
 /* 侧边栏样式 */
@@ -234,6 +268,20 @@
 
 .todo-window .text-field, .todo-window .text-area, .todo-window .combo-box, .todo-window .date-picker {
     -fx-pref-width: 300px;
+}
+
+/* 统一日期选择器和分类选择器样式 */
+.todo-window .date-picker, .todo-window .combo-box {
+    -fx-pref-height: 35px;
+}
+
+.todo-window .date-picker .arrow-button, .todo-window .combo-box .arrow-button {
+    -fx-background-color: #6C60AB;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.todo-window .date-picker .arrow-button .arrow, .todo-window .combo-box .arrow-button .arrow {
+    -fx-background-color: white;
 }
 
 /* 修改密码窗口样式 */
@@ -383,6 +431,7 @@
     -fx-font-size: 14px;
 }
 
+/* CustomDialog 样式 (continued) */
 .custom-dialog > .dialog-pane .button:hover {
     -fx-background-color: #815DAB;
 }
@@ -409,4 +458,93 @@
 
 .custom-dialog .validation-error-list .label {
     -fx-text-fill: #D32F2F;
+}
+
+/* Todo窗口中的分类和状态选择器样式 */
+.todo-window .category-combo-box,
+.todo-window .status-combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.todo-window .category-combo-box .list-cell,
+.todo-window .status-combo-box .list-cell {
+    -fx-text-fill: #6C60AB;
+    -fx-background-color: white;
+}
+
+.todo-window .category-combo-box .arrow-button,
+.todo-window .status-combo-box .arrow-button {
+    -fx-background-color: #6C60AB;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.todo-window .category-combo-box .arrow-button .arrow,
+.todo-window .status-combo-box .arrow-button .arrow {
+    -fx-background-color: white;
+}
+
+/* Todo窗口中的描述文本区域样式 */
+.todo-window .description-area {
+    -fx-background-color: white;
+    -fx-border-color: #8187C5;
+    -fx-border-width: 1px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+}
+
+/* Todo窗口中的按钮样式 */
+.todo-window .save-button,
+.todo-window .cancel-button,
+.todo-window .delete-button {
+    -fx-pref-width: 100px;
+    -fx-font-size: 14px;
+}
+
+.todo-window .save-button {
+    -fx-background-color: #4CAF50;
+}
+
+.todo-window .save-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.todo-window .cancel-button {
+    -fx-background-color: #f44336;
+}
+
+.todo-window .cancel-button:hover {
+    -fx-background-color: #da190b;
+}
+
+.todo-window .delete-button {
+    -fx-background-color: #ff9800;
+}
+
+.todo-window .delete-button:hover {
+    -fx-background-color: #e68a00;
+}
+
+/* Todo窗口中的标签样式 */
+.todo-window .form-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #6C60AB;
+}
+
+/* Todo窗口整体布局样式 */
+.todo-window .form-grid {
+    -fx-hgap: 10;
+    -fx-vgap: 15;
+    -fx-padding: 20;
+}
+
+/* 确保所有输入控件的高度一致 */
+.todo-window .text-field,
+.todo-window .combo-box,
+.todo-window .date-picker {
+    -fx-pref-height: 35px;
 }

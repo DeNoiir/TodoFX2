@@ -29,7 +29,7 @@ public class Todo implements Entity<String> {
         this.id = new SimpleStringProperty();
         this.title = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
-        this.category = new SimpleObjectProperty<>();  // 初始化为null
+        this.category = new SimpleObjectProperty<>();
         this.status = new SimpleObjectProperty<>(Status.待办);
         this.dueDate = new SimpleObjectProperty<>();
         this.createdAt = new SimpleObjectProperty<>(LocalDateTime.now());

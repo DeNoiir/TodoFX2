@@ -43,17 +43,13 @@ public class CustomDialog extends Dialog<ButtonType> {
         getDialogPane().getStyleClass().add("custom-dialog");
         getDialogPane().getStyleClass().add(getStyleClass());
 
-        // 移除窗口装饰
         initStyle(StageStyle.TRANSPARENT);
 
-        // 设置窗口大小根据内容自动调整
         getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
         getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
 
-        // 确保对话框面板的背景是透明的
         getDialogPane().setStyle("-fx-background-color: transparent;");
 
-        // 让对话框可以移动
         makeDraggable();
     }
 
@@ -155,7 +151,6 @@ public class CustomDialog extends Dialog<ButtonType> {
         });
     }
 
-    // 用于跟踪鼠标拖动的内部类
     private static class Delta {
         double x, y;
     }
