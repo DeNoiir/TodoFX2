@@ -6,8 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.layout.Region;
 
@@ -46,11 +44,14 @@ public class CustomDialog extends Dialog<ButtonType> {
         getDialogPane().getStyleClass().add(getStyleClass());
 
         // 移除窗口装饰
-        initStyle(StageStyle.UNDECORATED);
+        initStyle(StageStyle.TRANSPARENT);
 
         // 设置窗口大小根据内容自动调整
         getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
         getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // 确保对话框面板的背景是透明的
+        getDialogPane().setStyle("-fx-background-color: transparent;");
 
         // 让对话框可以移动
         makeDraggable();

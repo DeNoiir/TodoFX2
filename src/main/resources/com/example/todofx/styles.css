@@ -203,7 +203,6 @@
     -fx-border-radius: 10px;
     -fx-border-color: #6C60AB;
     -fx-border-width: 2px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
 }
 
 .pomo-timer-label {
@@ -242,24 +241,6 @@
     -fx-background-color: #C7D1EA;
     -fx-padding: 20;
     -fx-background-radius: 10px;
-}
-
-/* 通用对话框样式 */
-.dialog-pane {
-    -fx-background-color: #C7D1EA;
-}
-
-.dialog-pane .header-panel {
-    -fx-background-color: #815DAB;
-    -fx-background-radius: 10 10 0 0;
-}
-
-.dialog-pane .header-panel .label {
-    -fx-text-fill: white;
-}
-
-.dialog-pane .content.label {
-    -fx-text-fill: #6C60AB;
 }
 
 /* 滚动条样式 */
@@ -353,72 +334,70 @@
 
 /* CustomDialog 样式 */
 .custom-dialog {
+    -fx-background-color: transparent;
+}
+
+.custom-dialog > .dialog-pane {
     -fx-background-color: #C7D1EA;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-border-color: #6C60AB;
     -fx-border-width: 2px;
     -fx-padding: 20px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
 }
 
-.custom-dialog .dialog-pane {
-    -fx-background-color: transparent;
+.custom-dialog > .dialog-pane > .content.label {
+    -fx-padding: 0.5em 0 0 0;
+    -fx-text-fill: #6C60AB;
+    -fx-font-size: 14px;
 }
 
-.custom-dialog .dialog-pane .header-panel {
+.custom-dialog > .dialog-pane > .header-panel {
     -fx-background-color: transparent;
     -fx-padding: 0 0 10 0;
 }
 
-.custom-dialog .dialog-pane .header-panel .label {
+.custom-dialog > .dialog-pane > .header-panel > .label {
     -fx-text-fill: #6C60AB;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
-.custom-dialog .dialog-pane .content.label {
-    -fx-text-fill: #6C60AB;
-    -fx-font-size: 14px;
-}
-
-.custom-dialog .dialog-pane .button-bar {
+.custom-dialog > .dialog-pane > .button-bar {
+    -fx-background-color: transparent;
     -fx-padding: 10 0 0 0;
 }
 
-.custom-dialog .dialog-pane .button-bar .button {
+.custom-dialog > .dialog-pane > .button-bar > .container {
+    -fx-background-color: transparent;
+}
+
+.custom-dialog > .dialog-pane > .expandable-content {
+    -fx-background-color: #C7D1EA;
+    -fx-padding: 10 0 0 0;
+}
+
+.custom-dialog > .dialog-pane .button {
     -fx-background-color: #6C60AB;
     -fx-text-fill: white;
     -fx-font-size: 14px;
 }
 
-.custom-dialog .dialog-pane .button-bar .button:hover {
+.custom-dialog > .dialog-pane .button:hover {
     -fx-background-color: #815DAB;
 }
 
-.custom-dialog .dialog-pane .expandable-content {
-    -fx-padding: 10;
-}
-
-.custom-dialog .dialog-pane .expandable-content .label {
-    -fx-font-weight: bold;
-}
-
-.custom-dialog .dialog-pane .expandable-content .text-area {
-    -fx-font-family: monospace;
-}
-
 /* 特定类型对话框样式 */
-.info-dialog .dialog-pane .header-panel {
-    -fx-background-color: #4CAF50;
+.info-dialog > .dialog-pane {
+    -fx-border-color: #4CAF50;
 }
 
-.warning-dialog .dialog-pane .header-panel {
-    -fx-background-color: #FFC107;
+.warning-dialog > .dialog-pane {
+    -fx-border-color: #FFC107;
 }
 
-.error-dialog .dialog-pane .header-panel {
-    -fx-background-color: #F44336;
+.error-dialog > .dialog-pane {
+    -fx-border-color: #F44336;
 }
 
 /* 验证错误样式 */
