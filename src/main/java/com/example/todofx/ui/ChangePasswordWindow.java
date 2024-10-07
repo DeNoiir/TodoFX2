@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChangePasswordWindow extends Stage {
     private final UserService userService;
@@ -62,7 +63,7 @@ public class ChangePasswordWindow extends Stage {
         grid.add(cancelButton, 1, 3);
 
         Scene scene = new Scene(grid);
-        scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
 
         setScene(scene);
     }

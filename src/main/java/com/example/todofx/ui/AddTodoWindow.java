@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AddTodoWindow extends Stage {
     private final TodoService todoService;
@@ -87,7 +88,7 @@ public class AddTodoWindow extends Stage {
         mainLayout.getChildren().addAll(grid, buttonBox);
 
         Scene scene = new Scene(mainLayout);
-        scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
 
         setScene(scene);
     }

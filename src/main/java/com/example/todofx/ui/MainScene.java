@@ -18,13 +18,14 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MainScene {
-    private MainApp mainApp;
-    private UserService userService;
-    private TodoService todoService;
-    private PomoService pomoService;
+    private final MainApp mainApp;
+    private final UserService userService;
+    private final TodoService todoService;
+    private final PomoService pomoService;
     private Scene scene;
     private PomoWindow pomoWindow;
 
@@ -55,11 +56,9 @@ public class MainScene {
         mainLayout.setCenter(centerContent);
 
         scene = new Scene(mainLayout, width, height);
-        scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
 
-        todoService.getTodosObservableList().addListener((ListChangeListener<Todo>) c -> {
-            updateKanbanBoard(todoService.getTodos());
-        });
+        todoService.getTodosObservableList().addListener((ListChangeListener<Todo>) c -> updateKanbanBoard(todoService.getTodos()));
     }
 
     private HBox createFloatingButtons() {
@@ -220,10 +219,9 @@ public class MainScene {
     }
 
     private void updateKanbanBoard(java.util.List<Todo> todos) {
-        HBox kanbanBoard = (HBox) ((StackPane) ((BorderPane) scene.getRoot()).getCenter()).getChildren().get(0);
+        HBox kanbanBoard = (HBox) ((StackPane) ((BorderPane) scene.getRoot()).getCenter()).getChildren().getFirst();
         for (javafx.scene.Node node : kanbanBoard.getChildren()) {
-            if (node instanceof VBox) {
-                VBox column = (VBox) node;
+            if (node instanceof VBox column) {
                 ListView<Todo> listView = (ListView<Todo>) column.getChildren().get(1);
                 Label titleLabel = (Label) column.getChildren().get(0);
                 Todo.Status status = getTodoStatusFromTitle(titleLabel.getText());
@@ -235,16 +233,12 @@ public class MainScene {
     }
 
     private Todo.Status getTodoStatusFromTitle(String title) {
-        switch (title) {
-            case "待办":
-                return Todo.Status.待办;
-            case "进行中":
-                return Todo.Status.进行中;
-            case "已完成":
-                return Todo.Status.已完成;
-            default:
-                throw new IllegalArgumentException("无效的列标题: " + title);
-        }
+        return switch (title) {
+            case "待办" -> Todo.Status.待办;
+            case "进行中" -> Todo.Status.进行中;
+            case "已完成" -> Todo.Status.已完成;
+            default -> throw new IllegalArgumentException("无效的列标题: " + title);
+        };
     }
 
     private void showAddTodoWindow() {
@@ -278,9 +272,9 @@ public class MainScene {
     }
 
     private class TodoListCell extends ListCell<Todo> {
-        private HBox hbox;
-        private Label titleLabel;
-        private Label dueDateLabel;
+        private final HBox hbox;
+        private final Label titleLabel;
+        private final Label dueDateLabel;
         private final Text helper;
 
         public TodoListCell() {

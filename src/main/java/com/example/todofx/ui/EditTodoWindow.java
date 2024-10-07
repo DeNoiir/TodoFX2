@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EditTodoWindow extends Stage {
     private final TodoService todoService;
@@ -99,7 +100,7 @@ public class EditTodoWindow extends Stage {
         mainLayout.getChildren().addAll(grid, buttonBox);
 
         Scene scene = new Scene(mainLayout);
-        scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
 
         setScene(scene);
     }

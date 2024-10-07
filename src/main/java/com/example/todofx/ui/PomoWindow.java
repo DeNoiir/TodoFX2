@@ -73,12 +73,10 @@ public class PomoWindow extends Stage {
         initStyle(StageStyle.TRANSPARENT);
         setAlwaysOnTop(true);
 
-        root.setOnMousePressed(pressEvent -> {
-            root.setOnMouseDragged(dragEvent -> {
-                setX(dragEvent.getScreenX() - pressEvent.getSceneX());
-                setY(dragEvent.getScreenY() - pressEvent.getSceneY());
-            });
-        });
+        root.setOnMousePressed(pressEvent -> root.setOnMouseDragged(dragEvent -> {
+            setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+            setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+        }));
     }
 
     private void initTimer() {
@@ -107,16 +105,12 @@ public class PomoWindow extends Stage {
     }
 
     private String getStateString(PomoTimer.PomoState state) {
-        switch (state) {
-            case WORK:
-                return "专注工作";
-            case SHORT_BREAK:
-                return "短休息";
-            case LONG_BREAK:
-                return "长休息";
-            default:
-                return "未知状态";
-        }
+        return switch (state) {
+            case WORK -> "专注工作";
+            case SHORT_BREAK -> "短休息";
+            case LONG_BREAK -> "长休息";
+            default -> "未知状态";
+        };
     }
 
     private void startTimer() {

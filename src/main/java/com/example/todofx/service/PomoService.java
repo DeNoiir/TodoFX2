@@ -84,16 +84,12 @@ public class PomoService {
     }
 
     private int getInitialTime(PomoTimer.PomoState state) {
-        switch (state) {
-            case WORK:
-                return 25 * 60; // 25 minutes
-            case SHORT_BREAK:
-                return 5 * 60; // 5 minutes
-            case LONG_BREAK:
-                return 15 * 60; // 15 minutes
-            default:
-                throw new IllegalStateException("Unexpected value: " + state);
-        }
+        return switch (state) {
+            case WORK -> 25 * 60; // 25 minutes
+            case SHORT_BREAK -> 5 * 60; // 5 minutes
+            case LONG_BREAK -> 15 * 60; // 15 minutes
+            default -> throw new IllegalStateException("Unexpected value: " + state);
+        };
     }
 
     private void completeCurrentCycle() {

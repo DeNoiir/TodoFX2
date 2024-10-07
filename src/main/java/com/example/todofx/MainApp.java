@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
+import java.util.Objects;
 
 public class MainApp extends Application {
     private UserService userService;
@@ -21,8 +22,6 @@ public class MainApp extends Application {
     private PomoService pomoService;
     private Stage primaryStage;
     private Stage loginStage;
-    private double initialWidth = 1000;
-    private double initialHeight = 600;
 
     @Override
     public void start(Stage primaryStage) {
@@ -63,16 +62,18 @@ public class MainApp extends Application {
     private void setupLoginStage() {
         LoginScene loginScene = new LoginScene(this, userService);
         loginStage.setScene(loginScene.getScene());
-        loginStage.getScene().getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        loginStage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
         loginStage.setTitle("Todo App - Login");
         loginStage.setResizable(false);
         loginStage.centerOnScreen();
     }
 
     public void showMainScene() {
+        double initialWidth = 1000;
+        double initialHeight = 600;
         MainScene mainScene = new MainScene(this, userService, todoService, pomoService, initialWidth, initialHeight);
         primaryStage.setScene(mainScene.getScene());
-        mainScene.getScene().getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        mainScene.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
         primaryStage.setTitle("Todo App - Main");
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);

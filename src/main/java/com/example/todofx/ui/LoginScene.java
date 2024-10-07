@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LoginScene {
     private MainApp mainApp;
@@ -62,7 +63,7 @@ public class LoginScene {
         );
 
         scene = new Scene(loginBox, 400, 300);
-        scene.getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
     }
 
     private void login(String username, String password) {
@@ -70,9 +71,7 @@ public class LoginScene {
             userService.login(username, password)
                     .thenAcceptAsync(success -> {
                         if (success) {
-                            Platform.runLater(() -> {
-                                mainApp.showMainScene();
-                            });
+                            Platform.runLater(() -> mainApp.showMainScene());
                         } else {
                             Platform.runLater(() -> CustomDialog.showAndWait(CustomDialog.DialogType.ERROR, "登录失败", "用户名或密码无效", "请检查您的用户名和密码，然后重试。"));
                         }

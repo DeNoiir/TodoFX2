@@ -12,11 +12,11 @@ import javafx.scene.layout.Region;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomDialog extends Dialog<ButtonType> {
 
     private final DialogType dialogType;
-    private TextArea detailsTextArea;
 
     public enum DialogType {
         INFO, WARNING, ERROR, EXCEPTION
@@ -30,7 +30,7 @@ public class CustomDialog extends Dialog<ButtonType> {
     public CustomDialog(Throwable ex) {
         this.dialogType = DialogType.EXCEPTION;
         initDialog(getHeaderText(ex), getHeaderText(ex), getContentText(ex));
-        this.detailsTextArea = createDetailsTextArea(getStackTraceText(ex));
+        TextArea detailsTextArea = createDetailsTextArea(getStackTraceText(ex));
         getDialogPane().setExpandableContent(createExpandableContent(detailsTextArea));
     }
 
@@ -39,7 +39,7 @@ public class CustomDialog extends Dialog<ButtonType> {
         setContentText(contentText);
 
         getDialogPane().getButtonTypes().add(ButtonType.OK);
-        getDialogPane().getStylesheets().add(getClass().getResource("/com/example/todofx/styles.css").toExternalForm());
+        getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/todofx/styles.css")).toExternalForm());
         getDialogPane().getStyleClass().add("custom-dialog");
         getDialogPane().getStyleClass().add(getStyleClass());
 
@@ -70,17 +70,12 @@ public class CustomDialog extends Dialog<ButtonType> {
     }
 
     private String getStyleClass() {
-        switch (dialogType) {
-            case INFO:
-                return "info-dialog";
-            case WARNING:
-                return "warning-dialog";
-            case ERROR:
-            case EXCEPTION:
-                return "error-dialog";
-            default:
-                return "";
-        }
+        return switch (dialogType) {
+            case INFO -> "info-dialog";
+            case WARNING -> "warning-dialog";
+            case ERROR, EXCEPTION -> "error-dialog";
+            default -> "";
+        };
     }
 
     private String getHeaderText(Throwable ex) {
