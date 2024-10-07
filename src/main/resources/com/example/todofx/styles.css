@@ -354,25 +354,36 @@
 /* CustomDialog 样式 */
 .custom-dialog {
     -fx-background-color: #C7D1EA;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #6C60AB;
+    -fx-border-width: 2px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
 }
 
 .custom-dialog .dialog-pane {
-    -fx-background-color: #C7D1EA;
+    -fx-background-color: transparent;
 }
 
 .custom-dialog .dialog-pane .header-panel {
-    -fx-background-color: #815DAB;
-    -fx-background-radius: 10 10 0 0;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 10 0;
 }
 
 .custom-dialog .dialog-pane .header-panel .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #6C60AB;
     -fx-font-size: 18px;
+    -fx-font-weight: bold;
 }
 
 .custom-dialog .dialog-pane .content.label {
     -fx-text-fill: #6C60AB;
     -fx-font-size: 14px;
+}
+
+.custom-dialog .dialog-pane .button-bar {
+    -fx-padding: 10 0 0 0;
 }
 
 .custom-dialog .dialog-pane .button-bar .button {

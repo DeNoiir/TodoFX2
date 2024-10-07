@@ -8,6 +8,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.layout.Region;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -29,13 +31,12 @@ public class CustomDialog extends Dialog<ButtonType> {
 
     public CustomDialog(Throwable ex) {
         this.dialogType = DialogType.EXCEPTION;
-        initDialog("错误", getHeaderText(ex), getContentText(ex));
+        initDialog(getHeaderText(ex), getHeaderText(ex), getContentText(ex));
         this.detailsTextArea = createDetailsTextArea(getStackTraceText(ex));
         getDialogPane().setExpandableContent(createExpandableContent(detailsTextArea));
     }
 
     private void initDialog(String title, String headerText, String contentText) {
-        setTitle(title);
         setHeaderText(headerText);
         setContentText(contentText);
 
@@ -44,10 +45,27 @@ public class CustomDialog extends Dialog<ButtonType> {
         getDialogPane().getStyleClass().add("custom-dialog");
         getDialogPane().getStyleClass().add(getStyleClass());
 
-        Stage stage = (Stage) getDialogPane().getScene().getWindow();
-        stage.setResizable(true);
-        stage.setMinWidth(400);
-        stage.setMinHeight(300);
+        // 移除窗口装饰
+        initStyle(StageStyle.UNDECORATED);
+
+        // 设置窗口大小根据内容自动调整
+        getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
+        getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // 让对话框可以移动
+        makeDraggable();
+    }
+
+    private void makeDraggable() {
+        final Delta dragDelta = new Delta();
+        getDialogPane().setOnMousePressed(mouseEvent -> {
+            dragDelta.x = getX() - mouseEvent.getScreenX();
+            dragDelta.y = getY() - mouseEvent.getScreenY();
+        });
+        getDialogPane().setOnMouseDragged(mouseEvent -> {
+            setX(mouseEvent.getScreenX() + dragDelta.x);
+            setY(mouseEvent.getScreenY() + dragDelta.y);
+        });
     }
 
     private String getStyleClass() {
@@ -139,5 +157,10 @@ public class CustomDialog extends Dialog<ButtonType> {
             dialog.setValidationErrors(errors);
             dialog.showAndWait();
         });
+    }
+
+    // 用于跟踪鼠标拖动的内部类
+    private static class Delta {
+        double x, y;
     }
 }
